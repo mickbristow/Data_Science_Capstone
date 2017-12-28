@@ -1,0 +1,59 @@
+---
+title: "Milestone Report - Data Science Specialisation"
+author: "Michael Bristow"
+date: "28 December 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+This report outlines the objective of this projects and looks at the steps taken towards achieving this goal.
+It will specifically look at
+
+- Data sources used for building prediction model
+- Basic data summary
+- Steps taken to produce sample files and cleaning of data
+- Basic data exploration
+- Producing n-gram's from data
+- Outlinje of further work to be done
+
+##Data Sources
+Initial data was downloaded from
+https://d396qusza40orc.cloudfront.net/dsscapstone/dataset/Coursera-SwiftKey.zip"
+
+This produced three files that were tobe used for producing the n-gram model
+
+- en_US.blogs
+- en_US.news
+- en_US.twitter
+
+##Data Summary
+```r
+| File    | Size(Mb) |     Lines | Longest line | Words      |
+|---------|:--------:|----------:|--------------|------------|
+| blogs   |  200.424 |   899,288 | 40,833       | 37,334,131 |
+| news    |  196.278 | 1,010,242 | 11,384       | 34,372,530 |
+| twitter |  159.364 | 2,360,148 | 140          | 3,0373,583 |
+```
+##Sampling
+As can be seen these are very largew files containing over 4m text lines.
+
+Sample files were created to speed up the analysis.
+
+Initially they were samples at a rate of only 10%. This may be increased depending on performance of the model developed.
+
+This was done using a binomial distribution 
+
+##Cleaning of sampled data
+The data was then "cleaned" by
+
+- converting to lower case
+- removing punctuation and numbers
+- removing "stop" words
+- removing any white space
+- stem words
+
+##Data exploration
