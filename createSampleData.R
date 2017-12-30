@@ -1,52 +1,6 @@
-#createSampleFile <- function(filepath, fileName,selectprob, outFile){
-#  ofileName <- paste(filepath,"en_US.", fileName, ".txt", sep = "")
-#  
-#  openFile <- file(ofileName, open="rb")
-#  
-#  filedata <- readLines(openFile,encoding="UTF-8", skipNul = TRUE)
-#  
-#  set.seed(28122017)
-#  
-#  sitems <- rbinom(n = length(filedata), size = 1, prob = selectprob)
-#  
-#  #write out to sample file
-#  
-#  samplefileName <- paste(filepath,"sample_en_US.", fileName, ".txt", sep = "")
-#  
-#  
-#  print(samplefileName)
-#  
-#  sampFile <- file(samplefileName, open="w")
-#  
-#  sampData <- filedata[sitems == 1]
-#  
-#  
-#  writeLines(sampData, con = sampFile)
-#  #write out to single file
-#  writeLines(sampData, con = outFile)
-#  
-#  close(openFile)
-#  rm(openFile)
-#  close(sampFile)
-#  rm(sampFile)
-#}
-
-#masterPath <- "./datadir/final/en_US/"
-#singleSample <- paste(masterPath,"single_US", ".txt", sep = "")
-#singleFile <- file(singleSample, open="w")
-
-
-#createSampleFile(masterPath,"blogs", .001, singleFile)
-#createSampleFile(masterPath,"news", .001, singleFile)
-#createSampleFile(masterPath,"twitter", .001, singleFile)
-
-#close(singleFile)
-#rm(singleFile)
-##create single sample file
-
 #read in the three files
 set.seed(28122017)
-selectProb <- .001
+selectProb <- .10
 masterPath <- "./datadir/final/en_US/"
 
 #read data and sample
@@ -68,5 +22,12 @@ twitterSample <- twitterData[binomSample == 1]
 #create a sample file with all the 3 sample datas
 singleSample <- paste(masterPath,"single_US", ".txt", sep = "")
 allData <- c(blogSample, newsSample, twitterSample)
-writeLines(allData, singleSample)
+
+encodingASCII <- function(inputData, print=FALSE){
+  inputData <- lapply(inputData, function(row) iconv(row, "latin1", "ASCII", sub="")) 
+  return(unlist(inputData))
+}
+cleanData <- encodingASCII(allData)
+
+writeLines(cleanData, singleSample)
 

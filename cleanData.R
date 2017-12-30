@@ -7,6 +7,7 @@ filedata <- readLines(singleFile,encoding="UTF-8", skipNul = TRUE)
 close(singleFile)
 rm(singleFile)
 
+
 #create corpus and clean data
 dataCorpus <- VCorpus(VectorSource(filedata))
 dataCorpus <- tm_map(dataCorpus, content_transformer(function(x) iconv(x, to="UTF-8", sub="byte")))
