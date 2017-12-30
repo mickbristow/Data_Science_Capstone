@@ -9,40 +9,33 @@ rm(singleFile)
 
 #create corpus and clean data
 dataCorpus <- VCorpus(VectorSource(filedata))
-
-print("utf")
 dataCorpus <- tm_map(dataCorpus, content_transformer(function(x) iconv(x, to="UTF-8", sub="byte")))
 
+toSpace <- content_transformer(function(x, pattern) gsub(pattern, " ", x))
+dataCorpus <- tm_map(dataCorpus, toSpace, "(f|ht)tp(s?)://(.*)[.][a-z]+")
+dataCorpus <- tm_map(dataCorpus, toSpace, "@[^\\s]+")
 
-print("plain")
-#set as plain text
-dataCorpus <- tm_map(dataCorpus, PlainTextDocument)
-
-print("tolower")
 #convert to lower
 dataCorpus <- tm_map(dataCorpus, tolower)
 
-print("white")
-#strip whitespace
-dataCorpus <- tm_map(dataCorpus, stripWhitespace)
-
-print("stop")
 #remove stop words
 dataCorpus <- tm_map(dataCorpus, removeWords, stopwords("english"))
 
-print("num")
 #remove numbers
 dataCorpus <- tm_map(dataCorpus, removeNumbers)
 
-print("punc")
 #remove punctuation
 dataCorpus <- tm_map(dataCorpus, removePunctuation)
 
-print("stem")
 #stem words
-dataCorpus <- tm_map(dataCorpus, stemDocument)
+#dataCorpus <- tm_map(dataCorpus, stemDocument, language = "english")
 
-print("save")
+#strip whitespace
+dataCorpus <- tm_map(dataCorpus, stripWhitespace)
+
+#set as plain text
+dataCorpus <- tm_map(dataCorpus, PlainTextDocument)
+
 #save cleaned corpus
 cleanCorpus <- paste(masterPath,"cleanCorpus", ".RDS", sep = "")
 saveRDS(dataCorpus, file = cleanCorpus)

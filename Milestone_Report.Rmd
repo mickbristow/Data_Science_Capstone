@@ -56,4 +56,97 @@ The data was then "cleaned" by
 - removing any white space
 - stem words
 
+Sample file was saved as RDS to allow for more efficient opening in future  tasks
+
 ##Data exploration
+The data was sorted by the highest occurence of each word
+
+The following wordcloud was produced
+
+```{r echo = FALSE, message=FALSE, results='asis', warning = FALSE}
+library(tm)
+library(wordcloud)
+masterPath <- "./datadir/final/en_US/"
+cleanCorpus <- paste(masterPath,"cleanCorpus", ".RDS", sep = "")
+finalCorpus <- readRDS(cleanCorpus)
+wordcloud(finalCorpus, max.words = 100, random.order = FALSE,  colors=brewer.pal(8, "Dark2"))
+```
+
+Here is a histogram showing the 10 highest word occurrences
+```{r echo = FALSE, message=FALSE, results='asis', warning = FALSE}
+#creaet plt function
+plotNgram <- function(myNgram, topNum){
+  mymatrix <- as.matrix(myNgram)
+  wordcount <- colSums(mymatrix)
+  #create a data frame
+  mydf <- as.data.frame(melt(wordcount))
+  #set extra column with row name, makes plotting easier
+  mydf$item <- rownames(mydf)
+  mydf <- mydf[order(-mydf$value),]
+  #factor so it does not sort
+  mydf$item <- factor(mydf$item, levels = mydf$item)
+  
+  histo <- ggplot(mydf[1:topNum,], aes(x=item, y= value)) + 
+    geom_bar(stat="identity") +
+    xlab("Words") +
+    ylab("Occurrence") +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1))
+ }
+```
+
+
+
+```{r echo = FALSE, message=FALSE, results='asis', warning = FALSE}
+library(ggplot2)
+library(reshape2)
+mat <- DocumentTermMatrix(finalCorpus)
+g1 <- plotNgram(mat,10)
+print(g1)
+```
+
+##N-Grams
+We use ngrams in our prediction model. An ngram is a list of continmuous words "n" long
+
+a 2-gram is a list of two words
+
+These are created using the RWeka library.
+
+This a list of the top 10 2-gram
+
+
+```{r echo = FALSE, message=FALSE, results='asis', warning = FALSE}
+library(tm)
+library("RWeka")
+library(reshape2)
+
+my2Tokeniser <- function(useCorpus, ngramLevel){
+  NGramTokenizer(useCorpus, Weka_control(min=2, max=2))
+}
+
+ngram2 <- DocumentTermMatrix(finalCorpus, control=list(tokenize=my2Tokeniser))
+
+g2 <- plotNgram(ngram2,10)
+
+print(g2)
+```
+
+This a list of the top 10 3-gram
+
+
+```{r echo = FALSE, message=FALSE, results='asis', warning = FALSE}
+library(tm)
+library("RWeka")
+library(reshape2)
+
+my3Tokeniser <- function(useCorpus, ngramLevel){
+  NGramTokenizer(useCorpus, Weka_control(min=3, max=3))
+}
+
+ngram3 <- DocumentTermMatrix(finalCorpus, control=list(tokenize=my3Tokeniser))
+
+g3 <- plotNgram(ngram3,10)
+
+print(g3)
+```
+
+
