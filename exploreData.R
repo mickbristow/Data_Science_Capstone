@@ -33,12 +33,12 @@ mydf <- mydf[order(-mydf$value),]
 #factor so it does not sort
 mydf$item <- factor(mydf$item, levels = mydf$item)
 
-png("popularwords.png", width=600, height=480)
+#png("popularwords.png", width=600, height=480)
 histo <- ggplot(mydf[1:10,], aes(x=item, y= value)) + 
   geom_bar(stat="identity") +
   xlab("Words") +
   ylab("Occurrence")
 print(histo)
-dev.off()
+#dev.off()
 
 
