@@ -20,7 +20,7 @@ dataCorpus <- tm_map(dataCorpus, toSpace, "@[^\\s]+")
 dataCorpus <- tm_map(dataCorpus, tolower)
 
 #remove stop words
-dataCorpus <- tm_map(dataCorpus, removeWords, stopwords("english"))
+#dataCorpus <- tm_map(dataCorpus, removeWords, stopwords("english"))
 
 #remove numbers
 dataCorpus <- tm_map(dataCorpus, removeNumbers)

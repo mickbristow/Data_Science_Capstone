@@ -1,6 +1,6 @@
 #read in the three files
 set.seed(28122017)
-selectProb <- .10
+selectProb <- .010
 masterPath <- "./datadir/final/en_US/"
 
 #read data and sample
